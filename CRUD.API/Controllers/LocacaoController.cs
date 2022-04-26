@@ -1,29 +1,25 @@
-﻿using CRUD.Domain;
-using CRUD.Repository;
+﻿using CRUD.Interface;
+using CRUD.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
+using System;
 
 namespace CRUD.API.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
-    public class LocacaoController : ControllerBase
+    [Route("[controller]")]
+    public class LocacaoController : AppBaseController
     {
-
-      private readonly AppDbContext _context;
-
-      public LocacaoController(AppDbContext context)
+        public LocacaoController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Locacao>>> Get()
+        public dynamic Get()
         {
-            return Ok(await _context.Locacoes.ToListAsync());
-        }    
+            var resp = GetService<ILocacaoRepository>().Get();
+            return resp;
+        }
 
+       
     }
 }
